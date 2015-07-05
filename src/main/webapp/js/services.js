@@ -1,7 +1,7 @@
 "use strict";
 
 angularComparatorApp.factory("Product", function ($http) {
-    var API_URI = '/myweb/service/product';
+    var API_URI = '/Comparateur/service/product';
 
     return {
 
@@ -30,7 +30,7 @@ angularComparatorApp.factory("Product", function ($http) {
 });
 
 angularComparatorApp.factory("Provider", function ($http) {
-    var API_URI = '/myweb/service/provider';
+    var API_URI = '/Comparateur/service/provider';
 
     return {
 
