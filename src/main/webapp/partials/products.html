@@ -1,0 +1,97 @@
+<!-- header-->
+<header class="page-header">
+    <h1>Liste des produits <small>{{products.length}} produits</small>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#product-form-modal">Ajouter un produit</button>
+    </h1>
+</header>
+
+<!-- barre d'actions -->
+<section class="well form-inline">
+    <input class="span5" type="text" ng-model="search" placeholder="Rechercher">
+    <section class="pull-right">
+        <button class="btn btn-info" ng-click="tri = 'category'; reverse = !reverse">Trier par catégorie</button>
+        <button class="btn btn-info" ng-click="tri = 'label'; reverse = !reverse">Trier par titre</button>
+    </section>
+</section>
+
+
+<!-- liste des produits -->
+<div>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Label</th>
+        <th>Prix</th>
+        <th>Marque</th>
+        <th>Catégory</th>
+        <th>Enseigne</th>
+        <th>Code barre</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="product in products | orderBy:tri:reverse | filter : search ">
+        <td>{{product.id}}</td>
+        <td>{{product.label}}</td>
+        <td>{{product.price}}</td>
+        <td>{{product.mark}}</td>
+        <td>{{product.category}}</td>
+        <td>{{product.provider.title}}</td>
+        <td>{{product.barcode}}</td>
+        <td><button class="btn btn-danger" ng-click="deleteProduct(product)"><i class="icon-trash icon-white"></i></button></td>
+        <!--<td><a class="btn btn-info" href="#/movies/edit/{{movie.id}}"><i class="icon-edit icon-white"></i></a></td>-->
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<!-- formulaire de création - caché par défaut -->
+<div id="product-form-modal" class="modal hide fade" ng-controller="productFormController">
+    <header class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>Ajouter un produit</h3>
+    </header>
+    <section class="modal-body">
+        <form novalidate ng-upload name="productForm" class="form-horizontal" enctype="multipart/form-data">
+            <div class="control-group" ng-class="{error : !productForm.$pristine && productForm.inputTitle.$error.required}">
+                <label class="control-label">Label :</label>
+                <input type="text" name="inputTitle" ng-model="product.label" required>
+                <span class="help-block" ng-show="!productForm.$pristine && productForm.inputTitle.$error.required">Le label est obligatoire</span>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Prix :</label>
+                <input type="number" name="inputPrice" ng-model="product.price" >
+            </div>
+            <div class="control-group">
+                <label class="control-label">Marque :</label>
+                <input type="text" name="inputMark" ng-model="product.mark" >
+            </div>
+            <div class="control-group">
+                <label class="control-label">Catégorie : </label>
+                <input type="text" ng-model="product.category">
+            </div>
+            <div class="control-group">
+                <label class="control-label">Enseigne :</label>
+                <select ng-model="product.provider" ng-options="provider.title for provider in providersList" required>
+                    <option value="">-- Selectionner l'enseigne --</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Code barre :</label>
+                <input type="text" ng-model="product.barcode">
+            </div>
+            <!-- Upload de l'image à implémenter-->
+            <div class="control-group">
+                <label class="control-label">Image pour code barre :</label>
+                <input type="file" ng-model="product.image">
+            </div>
+
+        </form>
+    </section>
+    <footer class="modal-footer">
+        <button data-dismiss="modal" class="btn btn-danger btn-small">Annuler</button>
+        <button data-dismiss="modal" class="btn btn-success" ng-click="addProduct(product)" ng-disabled="productForm.$invalid">Ajouter</button>
+    </footer>
+</div>
